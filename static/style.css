@@ -1,9 +1,26 @@
+html,body{
+    height:100%;
+    margin:0;
+}
 h1 {
     font-size: 60pt;
     font-family: 'Courier New';
     text-align: center;
 }
-div{
-    font-size: 25pt;
+h2{
     text-align: center;
+}
+.form input{
+    font-size: 20px;
+    padding: 5px;
+    text-align: center;
+}
+button{
+    background-color: lightskyblue;
+    border: 1px;
+    border-radius: 4px;
+    padding: 20px;
+}
+canvas{
+    border: 2px solid black;
 }
