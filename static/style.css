@@ -10,6 +10,9 @@ h1 {
 h2{
     text-align: center;
 }
+form{
+    text-align: center;
+}
 .form input{
     font-size: 20px;
     padding: 5px;
