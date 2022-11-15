@@ -22,7 +22,7 @@ func input(wg *sync.WaitGroup, inputChan chan<- string, responseChan <-chan stri
 	defer wg.Done()
 	for content := range responseChan {
 		ResponseFromHangman = content
-		inputChan <- ResponseFromHangman
+		inputChan <- InputToHangman
 	}
 }
 
@@ -33,7 +33,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	t, _ := template.ParseFiles("static/hangmanweb.html")
 	t.Execute(w, data)
-	data.WordToDisplay = ResponseFromHangman
 	if r.Method == "POST" {
 		InputToHangman = r.FormValue("input")
 	}
