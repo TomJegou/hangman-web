@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"hangman"
 	"html/template"
 	"log"
@@ -37,6 +38,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Server() {
+	fmt.Println("The server is Running...")
 	fs := http.FileServer(http.Dir("./static"))
 	http.HandleFunc("/", rootHandler)
 	http.Handle("/static/", http.StripPrefix("/static", fs))
