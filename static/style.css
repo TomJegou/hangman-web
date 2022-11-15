@@ -3,11 +3,17 @@ html,body{
     margin:0;
 }
 h1 {
-    font-size: 60pt;
+    font-size: 40pt;
     font-family: 'Courier New';
     text-align: center;
 }
-h2{
+p{
+    font-family: 'Courier New';
+    font-size: 60pt;
+    border:2px solid black;
+    padding:100px;
+    margin-right:25%;
+    margin-left: 5%;
     text-align: center;
 }
 form{
@@ -24,6 +30,4 @@ button{
     border-radius: 4px;
     padding: 20px;
 }
-canvas{
-    border: 2px solid black;
-}
+
