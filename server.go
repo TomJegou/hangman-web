@@ -13,7 +13,7 @@ type Hangman struct {
 
 func hangHandler(w http.ResponseWriter, r *http.Request) {
 	data := Hangman{
-		WordToDisplay: "Hangman"}
+		WordToDisplay: "hangman"}
 	tmpl, err := template.ParseFiles("static/début.html")
 	if err != nil {
 		fmt.Println(err)
