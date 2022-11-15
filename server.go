@@ -1,31 +1,62 @@
 package main
 
 import (
-	"fmt"
+	"hangman"
 	"html/template"
 	"log"
 	"net/http"
+	"sync"
 )
 
 type Hangman struct {
 	WordToDisplay string
 }
 
+<<<<<<< HEAD
 func hangHandler(w http.ResponseWriter, r *http.Request) {
 	data := Hangman{
 		WordToDisplay: "hangman"}
 	tmpl, err := template.ParseFiles("static/début.html")
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err)}}
+=======
+var Input string
+var Content string
+
+func input(wg *sync.WaitGroup, inputChan chan<- string, responseChan <-chan string) {
+	defer wg.Done()
+	for content := range responseChan {
+		Content = content
+		inputChan <- Input
+>>>>>>> 07dd081f2ad67efcd3276c9e09f6acefebc4c473
 	}
-	tmpl.Execute(w, data)
 }
 
-func main() {
-	fileServer := http.FileServer(http.Dir("./static"))
-	http.Handle("/", fileServer)
-	http.HandleFunc("/hangman", hangHandler)
+func rootHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("static/hangmanweb.html"))
+	data := Hangman{
+		WordToDisplay: Content,
+	}
+	tmpl.Execute(w, data)
+	Input = r.FormValue("input")
+}
+
+func Server() {
+	fs := http.FileServer(http.Dir("./static"))
+	http.HandleFunc("/", rootHandler)
+	http.Handle("/static/", http.StripPrefix("/static", fs))
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func main() {
+	var wg sync.WaitGroup
+	inputChan := make(chan string)
+	responseChan := make(chan string)
+	wg.Add(2)
+	go input(&wg, inputChan, responseChan)
+	go Server()
+	go hangman.Hangman(&wg, inputChan, responseChan)
+	wg.Wait()
 }
