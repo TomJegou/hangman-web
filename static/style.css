@@ -1,6 +1,13 @@
 html,body{
     height:100%;
-    margin:0;
+}
+#left{
+    width: 70%;
+    border-collapse: collapse;
+}
+#right{
+    width:30%;
+
 }
 h1 {
     font-size: 40pt;
@@ -9,11 +16,11 @@ h1 {
 }
 p{
     font-family: 'Courier New';
-    font-size: 60pt;
+    font-size:120px;
+    font-weight: bold;
     border:2px solid black;
-    padding:100px;
-    margin-right:25%;
-    margin-left: 5%;
+    padding:80px;
+    margin:auto;
     text-align: center;
 }
 form{
@@ -23,6 +30,7 @@ form{
     font-size: 20px;
     padding: 5px;
     text-align: center;
+    margin-top: 100px;
 }
 button{
     background-color: lightskyblue;

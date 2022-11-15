@@ -7,12 +7,16 @@
         <title>Hangman</title>
     </head>
     <body>
+        <div id="left">
         <h1>Hangman</h1>
-        <h2><canvas id="Canvas" width="1000" height="300"></canvas>
-            <p>{{.WordToDisplay}}</p>
-            <form class="form">
-            <input type="text" name="input" placeholder="choisissez votre lettre" minlenght="0" maxlenght="1">
-            <input type="submit" value="Essaye !">
-        </form></h2>       
+        <p>{{.WordToDisplay}}</p>
+        <form class="form">
+        <input type="text" name="input" placeholder="choisissez votre lettre" minlenght="0" maxlenght="1">
+        <input type="submit" value="Essaye !">
+        </form> 
+        </div>  
+        <div id="right">
+
+        </div>  
     </body>
 </html>
