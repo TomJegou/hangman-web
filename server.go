@@ -30,11 +30,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		Method:        r.Method,
 	}
 	t, _ := template.ParseFiles("static/hangmanweb.html")
+	t.Execute(w, data)
 	if r.Method == "POST" {
 		Input = r.FormValue("input")
-		rootHandler(w, r)
 	}
-	t.Execute(w, data)
 }
 
 func Server() {
