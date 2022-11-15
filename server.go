@@ -10,6 +10,7 @@ import (
 
 type Hangman struct {
 	WordToDisplay string
+	Method        string
 }
 
 var Input string
@@ -24,12 +25,16 @@ func input(wg *sync.WaitGroup, inputChan chan<- string, responseChan <-chan stri
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("static/hangmanweb.html"))
 	data := Hangman{
 		WordToDisplay: Content,
+		Method:        r.Method,
 	}
-	tmpl.Execute(w, data)
-	Input = r.FormValue("input")
+	t, _ := template.ParseFiles("static/hangmanweb.html")
+	if r.Method == "POST" {
+		Input = r.FormValue("input")
+		rootHandler(w, r)
+	}
+	t.Execute(w, data)
 }
 
 func Server() {
