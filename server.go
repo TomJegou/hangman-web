@@ -12,14 +12,6 @@ type Hangman struct {
 	WordToDisplay string
 }
 
-<<<<<<< HEAD
-func hangHandler(w http.ResponseWriter, r *http.Request) {
-	data := Hangman{
-		WordToDisplay: "hangman"}
-	tmpl, err := template.ParseFiles("static/début.html")
-	if err != nil {
-		fmt.Println(err)}}
-=======
 var Input string
 var Content string
 
@@ -28,7 +20,6 @@ func input(wg *sync.WaitGroup, inputChan chan<- string, responseChan <-chan stri
 	for content := range responseChan {
 		Content = content
 		inputChan <- Input
->>>>>>> 07dd081f2ad67efcd3276c9e09f6acefebc4c473
 	}
 }
 
