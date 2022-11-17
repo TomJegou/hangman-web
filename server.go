@@ -24,6 +24,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/hangmanweb.html")
 	if r.Method == "POST" {
 		Data.WordToDisplay = <-ResponseChan
+		InputChan <- r.FormValue("input")
 	}
 	InputChan <- r.FormValue("input")
 	Data.WordToDisplay = <-ResponseChan
