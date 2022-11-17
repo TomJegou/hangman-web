@@ -1,17 +1,30 @@
-html{
-    min-width: 70%;
+html,body{
+    background: #131416;
 }
 a:hover {
     opacity: 0.5;
 }
-label{
+h1{
     font-family: 'Courier New';
+    font-size: 60px;
+    text-align: center;
+    color:beige;
+}
+legend{
+    font-family: 'Courier New';
+    font-size:30px;
+    color:beige;
+}
+div{
+    font-family: 'Courier New';
+    color:beige;
+    border: 2px solid beige;
+    margin:auto;
 }
 a{  
     position: relative;
-    left:29%;
     top: 100px;
-    color: whitesmoke;
+    color: beige;
     background-color: rgb(168, 167, 252);
     padding: 20px;
     font-family: 'Arial';
