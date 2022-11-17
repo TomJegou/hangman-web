@@ -5,7 +5,6 @@ import (
 	"hangman"
 	"log"
 	"net/http"
-	"sync"
 	"text/template"
 )
 
@@ -48,9 +47,6 @@ func Server() {
 }
 
 func main() {
-	var wg sync.WaitGroup
-	wg.Add(2)
 	go Server()
-	go hangman.Hangman(&wg, InputChan, ResponseChan, LevelChan)
-	wg.Wait()
+	go hangman.Hangman(InputChan, ResponseChan, LevelChan)
 }
