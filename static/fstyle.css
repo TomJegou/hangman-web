@@ -7,11 +7,14 @@ a:hover {
 h1{
     font-family: 'Courier New';
     font-size: 60px;
-    text-align: center;
     color:beige;
+    text-align: center;
 }
 fieldset{
-    width: 200px;
+    position: relative;
+    top: 100px;
+    left: 8%;
+    width: 80%;
     padding: 20px;
 }
 legend{
@@ -33,4 +36,10 @@ input[type="button"]{
     border: 2px solid whitesmoke;
     border-radius: 20px;
     transition: all 1s;
+}
+#lv1{
+    margin-right: 110px;
+}
+#lv2{
+    margin-right: 110px;
 }
