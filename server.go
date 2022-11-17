@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"hangman"
-	"html/template"
 	"log"
 	"net/http"
 	"sync"
+	"text/template"
 )
 
 type Hangman struct {
@@ -14,28 +14,21 @@ type Hangman struct {
 	Method        string
 }
 
-var InputToHangman string
-var ResponseFromHangman string
+var InputChan = make(chan string, 1)
+var ResponseChan = make(chan string, 1)
 
-func input(wg *sync.WaitGroup, inputChan chan<- string, responseChan <-chan string) {
-	fmt.Println("Input routine activated")
-	defer wg.Done()
-	for content := range responseChan {
-		ResponseFromHangman = content
-		inputChan <- InputToHangman
-	}
-}
+var Data Hangman
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	data := Hangman{
-		WordToDisplay: ResponseFromHangman,
-		Method:        r.Method,
-	}
-	t, _ := template.ParseFiles("static/first.html")
-	t.Execute(w, data)
+	Data.Method = r.Method
+	t, _ := template.ParseFiles("static/hangmanweb.html")
 	if r.Method == "POST" {
-		InputToHangman = r.FormValue("input")
+		Data.WordToDisplay = <-ResponseChan
+		InputChan <- r.FormValue("input")
 	}
+	InputChan <- r.FormValue("input")
+	Data.WordToDisplay = <-ResponseChan
+	t.Execute(w, Data)
 }
 
 func Server() {
@@ -50,11 +43,8 @@ func Server() {
 
 func main() {
 	var wg sync.WaitGroup
-	inputChan := make(chan string, 1)
-	responseChan := make(chan string, 1)
 	wg.Add(2)
-	go input(&wg, inputChan, responseChan)
 	go Server()
-	go hangman.Hangman(&wg, inputChan, responseChan)
+	go hangman.Hangman(&wg, InputChan, ResponseChan)
 	wg.Wait()
 }
