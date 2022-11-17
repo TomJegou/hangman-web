@@ -10,6 +10,10 @@ h1{
     text-align: center;
     color:beige;
 }
+fieldset{
+    width: 200px;
+    padding: 20px;
+}
 legend{
     font-family: 'Courier New';
     font-size:30px;
@@ -18,19 +22,15 @@ legend{
 div{
     font-family: 'Courier New';
     color:beige;
-    border: 2px solid beige;
-    margin:auto;
 }
-a{  
+input[type="button"]{  
     position: relative;
-    top: 100px;
     color: beige;
     background-color: rgb(168, 167, 252);
-    padding: 20px;
-    font-family: 'Arial';
+    padding: 5px;
+    font-family: 'Courier New';
     font-size: 50px;
     border: 2px solid whitesmoke;
-    border-radius: 30px;
-    text-decoration: none;
+    border-radius: 20px;
     transition: all 1s;
 }
