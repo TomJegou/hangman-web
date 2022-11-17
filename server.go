@@ -11,7 +11,6 @@ import (
 
 type Hangman struct {
 	WordToDisplay string
-	Method        string
 }
 
 var InputChan = make(chan string, 1)
@@ -20,7 +19,6 @@ var ResponseChan = make(chan string, 1)
 var Data Hangman
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
-	Data.Method = r.Method
 	t, _ := template.ParseFiles("static/hangmanweb.html")
 	if r.Method == "POST" {
 		Data.WordToDisplay = <-ResponseChan
