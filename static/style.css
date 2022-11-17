@@ -1,25 +1,21 @@
-html,body{
-    height:100%;
-}
 #left{
     width: 70%;
     border-collapse: collapse;
 }
 #right{
-    width:30%;
-
+    width:28%;
 }
 h1 {
-    font-size: 40pt;
+    font-size: 40px;
     font-family: 'Courier New';
     text-align: center;
 }
 p{
     font-family: 'Courier New';
-    font-size:120px;
+    font-size:100px;
     font-weight: bold;
     border:2px solid black;
-    padding:80px;
+    padding: 60px;
     margin:auto;
     text-align: center;
 }
@@ -30,12 +26,5 @@ form{
     font-size: 20px;
     padding: 5px;
     text-align: center;
-    margin-top: 100px;
+    margin-top: 10px;
 }
-button{
-    background-color: lightskyblue;
-    border: 1px;
-    border-radius: 4px;
-    padding: 20px;
-}
-

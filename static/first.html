@@ -2,11 +2,19 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="http://127.0.0.1:8080/static/style.css">
+        <link rel="stylesheet" href="http://localhost:8080/static/fstyle.css">
         <link rel="shortcut icon" href="pendu.png" />
         <title>Hangman</title>
     </head>
     <body>
-        <a href="hangmanweb.html">Commencez à jouer</a>
+        <input type="radio" id="nv1" name="level" value="lvl1">
+        <label for="nv1">NIVEAU 1</label><br>
+        <input type="radio" id="nv2" name="level" value="lvl2">
+        <label for="nv2">NIVEAU 2</label><br>
+        <input type="radio" id="nv3" name="level" value="lvl3">
+        <label for="nv3">NIVEAU 3</label><br>
+        <a href="http://localhost:8080/static/hangmanweb.html" class="button">
+            Commencer à jouer >>
+        </a>
     </body>
 </html>

@@ -31,7 +31,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		WordToDisplay: ResponseFromHangman,
 		Method:        r.Method,
 	}
-	t, _ := template.ParseFiles("static/hangmanweb.html")
+	t, _ := template.ParseFiles("static/first.html")
 	t.Execute(w, data)
 	if r.Method == "POST" {
 		InputToHangman = r.FormValue("input")
