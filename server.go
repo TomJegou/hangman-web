@@ -5,6 +5,7 @@ import (
 	"hangman"
 	"log"
 	"net/http"
+	"sync"
 	"text/template"
 )
 
@@ -21,21 +22,22 @@ var Data Hangman
 func hangHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/hangmanweb.html")
 	if r.Method == "POST" {
-		Data.WordToDisplay = <-ResponseChan
 		InputChan <- r.FormValue("input")
+		Data.WordToDisplay = <-ResponseChan
 	}
-	InputChan <- r.FormValue("input")
 	Data.WordToDisplay = <-ResponseChan
+	InputChan <- "End Input"
 	t.Execute(w, Data)
 }
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/startMenu.html")
-	LevelChan <- r.FormValue("level")
+	fmt.Println(r.FormValue("drone"))
 	t.Execute(w, Data)
 }
 
-func Server() {
+func Server(wg *sync.WaitGroup) {
+	defer wg.Done()
 	fmt.Println("The server is Running")
 	fs := http.FileServer(http.Dir("./static"))
 	http.HandleFunc("/hangman", hangHandler)
@@ -47,6 +49,9 @@ func Server() {
 }
 
 func main() {
-	go Server()
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go Server(&wg)
 	go hangman.Hangman(InputChan, ResponseChan, LevelChan)
+	wg.Wait()
 }
