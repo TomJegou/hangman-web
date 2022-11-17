@@ -31,7 +31,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("static/first.html")
+	t, _ := template.ParseFiles("static/startMenu.html")
 	LevelChan <- r.FormValue("level")
 	t.Execute(w, Data)
 }
