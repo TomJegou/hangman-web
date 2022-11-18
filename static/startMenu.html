@@ -11,9 +11,12 @@
         <fieldset>
             <legend>Sélectionner votre niveau</legend>
             <div>
-              <input type="button" id="1" name="drone" value="NIVEAU 1"><br>
-              <input type="button" id="2" name="drone" value="NIVEAU 2"><br>
-              <input type="button" id="3" name="drone" value="NIVEAU 3"><br>
+            <form action="/hangman">
+              <input type="radio" name="lvl" value="easy"><br>
+              <input type="radio" name="lvl" value="medium"><br>
+              <input type="radio" name="lvl" value="hard"><br>
+              <input type="submit" value="Commencez à jouer >>">
+            </form>
             </div>
         </fieldset>
     </body>
