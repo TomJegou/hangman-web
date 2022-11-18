@@ -12,9 +12,12 @@
             <legend>Sélectionner votre niveau</legend>
             <div>
             <form action="/hangman">
-              <input type="radio" name="lvl" value="easy"><br>
-              <input type="radio" name="lvl" value="medium"><br>
-              <input type="radio" name="lvl" value="hard"><br>
+              <input type="radio" id="lv1" name="lvl" value="easy">
+              <label for="lv1">EASY</label>
+              <input type="radio" id="lv2" name="lvl" value="medium">
+              <label for="lv2">MEDIUM</label>
+              <input type="radio" id="lv3" name="lvl" value="hard">
+              <label for="lv3">HARD</label>
               <input type="submit" value="Commencez à jouer >>">
             </form>
             </div>
