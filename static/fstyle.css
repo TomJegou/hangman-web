@@ -1,8 +1,9 @@
 html,body{
-    background: #131416;
+    background: #1f2023;
 }
-a:hover {
+input[type="button"]:hover {
     opacity: 0.5;
+    transform: translate(2px,-5px);
 }
 h1{
     font-family: 'Courier New';
@@ -38,8 +39,10 @@ input[type="button"]{
     transition: all 1s;
 }
 #lv1{
-    margin-right: 110px;
+    margin-right: 113px;
+    margin-bottom: 10px;
 }
 #lv2{
-    margin-right: 110px;
+    margin-right: 113px;
+    margin-bottom: 10px;
 }
