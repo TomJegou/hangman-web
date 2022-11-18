@@ -11,11 +11,13 @@ import (
 
 type Hangman struct {
 	WordToDisplay string
+	Attempt       int
 }
 
 var InputChan = make(chan string, 1)
 var ResponseChan = make(chan string, 1)
 var LevelChan = make(chan string, 1)
+var AttemptChan = make(chan int, 1)
 
 var Data Hangman
 
@@ -27,9 +29,11 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		InputChan <- r.FormValue("input")
 		Data.WordToDisplay = <-ResponseChan
+		Data.Attempt = <-AttemptChan
 	}
 	Data.WordToDisplay = <-ResponseChan
 	InputChan <- r.FormValue("input")
+	Data.Attempt = <-AttemptChan
 	t.Execute(w, Data)
 }
 
@@ -54,6 +58,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go Server(&wg)
-	go hangman.Hangman(InputChan, ResponseChan, LevelChan)
+	go hangman.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan)
 	wg.Wait()
 }
