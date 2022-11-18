@@ -20,7 +20,9 @@ var LevelChan = make(chan string, 1)
 var Data Hangman
 
 func hangHandler(w http.ResponseWriter, r *http.Request) {
-	LevelChan <- r.FormValue("lvl")
+	if r.Method == "GET" {
+		LevelChan <- r.FormValue("lvl")
+	}
 	t, _ := template.ParseFiles("static/hangmanweb.html")
 	if r.Method == "POST" {
 		InputChan <- r.FormValue("input")
