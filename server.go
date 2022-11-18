@@ -26,13 +26,13 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 		Data.WordToDisplay = <-ResponseChan
 	}
 	Data.WordToDisplay = <-ResponseChan
-	InputChan <- "End Input"
+	InputChan <- r.FormValue("input")
 	t.Execute(w, Data)
 }
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/startMenu.html")
-	fmt.Println(r.FormValue("drone"))
+	LevelChan <- r.FormValue("drone")
 	t.Execute(w, Data)
 }
 

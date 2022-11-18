@@ -10,11 +10,19 @@
         <h1>Jouons à HANGMAN !</h1>
         <fieldset>
             <legend>Sélectionner votre niveau</legend>
+            <form action="http://localhost:8080" method="get">
             <div>
-              <input type="button" id="lv1" name="drone" value="NIVEAU 1"checked>
-              <input type="button" id="lv2" name="drone" value="NIVEAU 2">
-              <input type="button" id="lv3" name="drone" value="NIVEAU 3">
-            </div>
+                <input type="radio" id="lv1" name="drone" value="1" checked>
+                <label for="lv1">NIVEAU 1</label>
+                <input type="radio" id="lv2" name="drone" value="2">
+                <label for="lv2">NIVEAU 2</label>
+                <input type="radio" id="lv3" name="drone" value="3">
+                <label for="lv3">NIVEAU 3</label>
+              </div>
+              <a href="http://localhost:8080/hangman">  
+                <input type="submit" value="Commencer à jouer >>"/>  
+               </a>
+            </form>
         </fieldset>
     </body>
 </html>
