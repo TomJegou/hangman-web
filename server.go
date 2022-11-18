@@ -20,6 +20,7 @@ var LevelChan = make(chan string, 1)
 var Data Hangman
 
 func hangHandler(w http.ResponseWriter, r *http.Request) {
+	LevelChan <- r.FormValue("lvl")
 	t, _ := template.ParseFiles("static/hangmanweb.html")
 	if r.Method == "POST" {
 		InputChan <- r.FormValue("input")
@@ -32,7 +33,6 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/startMenu.html")
-	LevelChan <- r.FormValue("drone")
 	t.Execute(w, Data)
 }
 
