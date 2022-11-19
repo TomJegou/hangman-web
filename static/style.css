@@ -28,3 +28,7 @@ form{
     text-align: center;
     margin-top: 10px;
 }
+.attempt{
+    text-align: center;
+    color: red;
+}
