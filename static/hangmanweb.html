@@ -8,7 +8,7 @@
     </head>
     <body>
         <h1>Hangman</h1>
-        <div id="left">
+        <div id="left" class="game">
         <h2>
             <p>{{.WordToDisplay}}</p>
             <div class="attempt">
@@ -20,8 +20,8 @@
             </form>
         </h2> 
         </div>
-        <div id="right">
-            <img src="http://localhost:8080/static/images/essais{{.Attempt}}.png">
+        <div id="right" class="game">
+            <img src="http://localhost:8080/static/images/essais{{.Attempt}}.png" id="hangman">
         </div>
     </body>
 </html>

@@ -1,14 +1,16 @@
 #left{
     width: 70%;
     border-collapse: collapse;
-    display: inline-block;
 }
 #right{
     width:28%;
+}
+.game{
     display: inline-block;
+    vertical-align: middle;
 }
 h1 {
-    font-size: 40px;
+    font-size: 150px;
     font-family: 'Courier New';
     text-align: center;
 }
@@ -33,4 +35,7 @@ form{
 .attempt{
     text-align: center;
     color: red;
+}
+#hangman{
+    width: 80%;
 }
