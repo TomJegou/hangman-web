@@ -1,9 +1,11 @@
 #left{
     width: 70%;
     border-collapse: collapse;
+    display: inline-block;
 }
 #right{
     width:28%;
+    display: inline-block;
 }
 h1 {
     font-size: 40px;
