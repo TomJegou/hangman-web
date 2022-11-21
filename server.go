@@ -30,7 +30,7 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(level)
 		LevelChan <- level
 		Data.WordToDisplay = <-ResponseChan
-		InputChan <- "checked"
+		InputChan <- "b0c9713aa009f4fcf39920d0d7eda80714b0c44ff2f98205278be112c755ca45e5386cbe7a9fca360ad22f06e45f80a8b8f23838725d15f889e202f5cea26359"
 		Data.Attempt = <-AttemptChan
 		t.Execute(w, Data)
 	} else if r.Method == "POST" {
