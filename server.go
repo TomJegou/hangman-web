@@ -18,7 +18,6 @@ var InputChan = make(chan string, 1)
 var ResponseChan = make(chan string, 1)
 var LevelChan = make(chan string, 1)
 var AttemptChan = make(chan int, 1)
-
 var Data Hangman
 
 func hangHandler(w http.ResponseWriter, r *http.Request) {
@@ -41,12 +40,10 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Je vais afficher la page")
 	t.Execute(w, Data)
 }
-
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/startMenu.html")
 	t.Execute(w, Data)
 }
-
 func Server(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
@@ -58,7 +55,6 @@ func Server(wg *sync.WaitGroup) {
 		log.Fatal(err)
 	}
 }
-
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
