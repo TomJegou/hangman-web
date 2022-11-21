@@ -30,7 +30,6 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Je vais parser la page")
 	if r.Method == "POST" {
-		t, _ = template.ParseFiles("static/hangmanweb.html")
 		InputChan <- r.FormValue("input")
 		Data.WordToDisplay = <-ResponseChan
 		Data.Attempt = <-AttemptChan
