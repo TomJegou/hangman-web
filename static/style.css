@@ -1,3 +1,6 @@
+body{
+    background-color: aqua;
+}
 #left{
     width: 70%;
     border-collapse: collapse;
