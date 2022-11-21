@@ -22,18 +22,23 @@ var AttemptChan = make(chan int, 1)
 var Data Hangman
 
 func hangHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		LevelChan <- r.FormValue("lvl")
-	}
 	t, _ := template.ParseFiles("static/hangmanweb.html")
+	if r.Method == "GET" {
+		level := r.FormValue("lvl")
+		fmt.Println(level)
+		LevelChan <- level
+	}
+	fmt.Println("Je vais parser la page")
 	if r.Method == "POST" {
 		InputChan <- r.FormValue("input")
 		Data.WordToDisplay = <-ResponseChan
 		Data.Attempt = <-AttemptChan
 	}
+	fmt.Println(Data.WordToDisplay)
 	Data.WordToDisplay = <-ResponseChan
 	InputChan <- r.FormValue("input")
 	Data.Attempt = <-AttemptChan
+	fmt.Println("Je vais afficher la page")
 	t.Execute(w, Data)
 }
 
