@@ -38,14 +38,12 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 		Data.WordToDisplay = <-ResponseChan
 		fmt.Println(Data.WordToDisplay)
 		Data.Attempt = <-AttemptChan
-		if Data.WordToDisplay == "662fae5f621abdad32655f00103d88d3fc45f2bb" {
+		if Data.WordToDisplay == "50536101b1c465eafbecc8fca26eeb18a2ac8a2f83570bade315c5a112363cdfd820acad2ab234f91d43f0db8fed0cec400a1109ad8f99c21b5b74f59e8bb00d" {
 			fmt.Println("Win")
-			InputChan <- "Win"
-			//http.Redirect(w, r, "/", http.StatusFound)
-		} else if Data.WordToDisplay == "8df6be46fc07d973c70580c412430566b4d624a8" {
+			http.Redirect(w, r, "/", http.StatusFound)
+		} else if Data.WordToDisplay == "889ce65f137b3b9aa1005f417d7972c948b8bb6360cbdd4118cb05a29d37905744fc0dbc3d17c1de02689d837bfea5bb8114a994f9c1a53dddb993139ab2974c" {
 			fmt.Println("Lose")
-			InputChan <- "Lose"
-			//http.Redirect(w, r, "/", http.StatusFound)
+			http.Redirect(w, r, "/", http.StatusFound)
 		}
 		t.Execute(w, Data)
 	}
