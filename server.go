@@ -22,16 +22,22 @@ var AttemptChan = make(chan int, 1)
 var Data Hangman
 
 func hangHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.Method)
+	fmt.Println("Je vais parser la page")
 	t, _ := template.ParseFiles("static/hangmanweb.html")
 	if r.Method == "GET" {
 		level := r.FormValue("lvl")
 		fmt.Println(level)
 		LevelChan <- level
-	}
-	fmt.Println("Je vais parser la page")
-	if r.Method == "POST" {
+		Data.WordToDisplay = <-ResponseChan
+		InputChan <- "checked"
+		Data.Attempt = <-AttemptChan
+		t.Execute(w, Data)
+	} else if r.Method == "POST" {
 		InputChan <- r.FormValue("input")
 		Data.WordToDisplay = <-ResponseChan
+		fmt.Println(Data.WordToDisplay)
+		Data.Attempt = <-AttemptChan
 		if Data.WordToDisplay == "662fae5f621abdad32655f00103d88d3fc45f2bb" {
 			fmt.Println("Win")
 			InputChan <- "Win"
@@ -39,26 +45,10 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 		} else if Data.WordToDisplay == "8df6be46fc07d973c70580c412430566b4d624a8" {
 			fmt.Println("Lose")
 			InputChan <- "Lose"
-			http.Redirect(w, r, "/", http.StatusFound)
-
+			//http.Redirect(w, r, "/", http.StatusFound)
 		}
-		Data.Attempt = <-AttemptChan
+		t.Execute(w, Data)
 	}
-	fmt.Println(Data.WordToDisplay)
-	Data.WordToDisplay = <-ResponseChan
-	if Data.WordToDisplay == "662fae5f621abdad32655f00103d88d3fc45f2bb" {
-		fmt.Println("Win2")
-		InputChan <- "Win2"
-		http.Redirect(w, r, "/", http.StatusFound)
-	} else if Data.WordToDisplay == "8df6be46fc07d973c70580c412430566b4d624a8" {
-		fmt.Println("lose2")
-		InputChan <- "Lose2"
-		http.Redirect(w, r, "/", http.StatusFound)
-	}
-	InputChan <- r.FormValue("input")
-	Data.Attempt = <-AttemptChan
-	fmt.Println("Je vais afficher la page")
-	t.Execute(w, Data)
 }
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
