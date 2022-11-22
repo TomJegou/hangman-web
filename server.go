@@ -88,6 +88,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go Server(&wg)
-	go hangman.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan)
+	go hangman.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan)
 	wg.Wait()
 }
