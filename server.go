@@ -7,7 +7,7 @@ import (
 	"sync"
 	"text/template"
 
-	"github.com/TomJegou/hangman-classic-Remy-12/src"
+	"github.com/TomJegou/hangman-classic-Remy/src"
 )
 
 type Hangman struct {
