@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
-	"hangman"
 	"log"
 	"net/http"
 	"sync"
 	"text/template"
+
+	"github.com/TomJegou/hangman-classic-Remy-12/src"
 )
 
 type Hangman struct {
@@ -60,7 +61,7 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 
 func winHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/win.html")
-	Data.Points = hangman.Points(Data.Attempt, Data.Level)
+	Data.Points = src.Points(Data.Attempt, Data.Level)
 	t.Execute(w, Data)
 }
 
@@ -88,6 +89,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go Server(&wg)
-	go hangman.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan)
+	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan)
 	wg.Wait()
 }
