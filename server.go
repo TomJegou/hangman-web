@@ -12,6 +12,8 @@ import (
 type Hangman struct {
 	WordToDisplay string
 	Attempt       int
+	Points        int
+	Level         string
 }
 
 var InputChan = make(chan string, 1)
@@ -26,9 +28,9 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Je vais parser la page")
 	t, _ := template.ParseFiles("static/hangmanweb.html")
 	if r.Method == "GET" {
-		level := r.FormValue("lvl")
-		fmt.Println(level)
-		LevelChan <- level
+		Data.Level = r.FormValue("lvl")
+		fmt.Println(Data.Level)
+		LevelChan <- Data.Level
 		Data.WordToDisplay = <-ResponseChan
 		InputChan <- "b0c9713aa009f4fcf39920d0d7eda80714b0c44ff2f98205278be112c755ca45e5386cbe7a9fca360ad22f06e45f80a8b8f23838725d15f889e202f5cea26359"
 		Data.Attempt = <-AttemptChan
@@ -51,6 +53,12 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/startMenu.html")
+	t.Execute(w, Data)
+}
+
+func winHandler(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("static/win.html")
+	Data.Points = hangman.Points(Data.Attempt, Data.Level)
 	t.Execute(w, Data)
 }
 
