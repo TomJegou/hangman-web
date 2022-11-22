@@ -48,6 +48,7 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/win", http.StatusFound)
 		} else if Data.WordToDisplay == "889ce65f137b3b9aa1005f417d7972c948b8bb6360cbdd4118cb05a29d37905744fc0dbc3d17c1de02689d837bfea5bb8114a994f9c1a53dddb993139ab2974c" {
 			fmt.Println("Lose")
+			Data.Word = <-WordChan
 			http.Redirect(w, r, "/lose", http.StatusFound)
 		}
 		t.Execute(w, Data)
@@ -89,6 +90,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go Server(&wg)
-	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan)
+	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan)
 	wg.Wait()
 }
