@@ -6,7 +6,12 @@ html,body{
     color: green;
     font-size: 1150%;
 }
-.points{
+.lose{
+    text-align: center;
+    color: red;
+    font-size: 1150%;
+}
+.endingphrase{
     text-align: center;
     color: beige;
     font-size: 450%;

@@ -2,8 +2,17 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="http://localhost:8080/static/fstyle.css">
+        <link rel="stylesheet" href="http://localhost:8080/static/resultstyle.css">
         <link rel="shortcut icon" href="pendu.png" />
         <title>Hangman</title> 
     </head>
+    <body>
+        <div class="lose">Aie, ce n'était pas le résultat attendu...</div>
+        <br>
+        <div class="endingphrase">Le mot était {{.Word}}</div>
+        <br>
+        <div class="link">
+            <a href="http://localhost:8080">Retour au menu principal</a>
+        </div>
+    </body>
 </html>

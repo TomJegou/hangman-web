@@ -14,12 +14,14 @@ type Hangman struct {
 	Attempt       int
 	Points        int
 	Level         string
+	Word          string
 }
 
 var InputChan = make(chan string, 1)
 var ResponseChan = make(chan string, 1)
 var LevelChan = make(chan string, 1)
 var AttemptChan = make(chan int, 1)
+var WordChan = make(chan string, 1)
 
 var Data Hangman
 
@@ -45,7 +47,7 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/win", http.StatusFound)
 		} else if Data.WordToDisplay == "889ce65f137b3b9aa1005f417d7972c948b8bb6360cbdd4118cb05a29d37905744fc0dbc3d17c1de02689d837bfea5bb8114a994f9c1a53dddb993139ab2974c" {
 			fmt.Println("Lose")
-			http.Redirect(w, r, "/", http.StatusFound)
+			http.Redirect(w, r, "/lose", http.StatusFound)
 		}
 		t.Execute(w, Data)
 	}
@@ -62,6 +64,12 @@ func winHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, Data)
 }
 
+func loseHandler(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("static/lose.html")
+	Data.Word = <-WordChan
+	t.Execute(w, Data)
+}
+
 func Server(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
@@ -69,6 +77,7 @@ func Server(wg *sync.WaitGroup) {
 	http.HandleFunc("/hangman", hangHandler)
 	http.HandleFunc("/", levelHandler)
 	http.HandleFunc("/win", winHandler)
+	http.HandleFunc("/lose", loseHandler)
 	http.Handle("/static/", http.StripPrefix("/static", fs))
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
@@ -79,6 +88,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go Server(&wg)
-	go hangman.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan)
+	go hangman.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan)
 	wg.Wait()
 }
