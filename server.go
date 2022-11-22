@@ -42,7 +42,7 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 		Data.Attempt = <-AttemptChan
 		if Data.WordToDisplay == "50536101b1c465eafbecc8fca26eeb18a2ac8a2f83570bade315c5a112363cdfd820acad2ab234f91d43f0db8fed0cec400a1109ad8f99c21b5b74f59e8bb00d" {
 			fmt.Println("Win")
-			http.Redirect(w, r, "/", http.StatusFound)
+			http.Redirect(w, r, "/win", http.StatusFound)
 		} else if Data.WordToDisplay == "889ce65f137b3b9aa1005f417d7972c948b8bb6360cbdd4118cb05a29d37905744fc0dbc3d17c1de02689d837bfea5bb8114a994f9c1a53dddb993139ab2974c" {
 			fmt.Println("Lose")
 			http.Redirect(w, r, "/", http.StatusFound)
@@ -68,6 +68,7 @@ func Server(wg *sync.WaitGroup) {
 	fs := http.FileServer(http.Dir("./static"))
 	http.HandleFunc("/hangman", hangHandler)
 	http.HandleFunc("/", levelHandler)
+	http.HandleFunc("/win", winHandler)
 	http.Handle("/static/", http.StripPrefix("/static", fs))
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)

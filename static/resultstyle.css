@@ -1,0 +1,31 @@
+html,body{
+    background: #1f2023;
+}
+.win{
+    text-align: center;
+    color: green;
+    font-size: 1150%;
+}
+.points{
+    text-align: center;
+    color: beige;
+    font-size: 450%;
+}
+.link{
+    text-align: center;
+    font-size: 200%;
+}
+a{
+    outline: none;
+    text-decoration: none;
+    padding: 2px 1px 0;
+    border-radius: 10px;
+    border: 2px solid;
+}
+a:link {
+    color: beige;
+  }
+  
+  a:visited {
+    color: beige;
+  }

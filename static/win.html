@@ -2,8 +2,16 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="http://localhost:8080/static/style.css">
+        <link rel="stylesheet" href="http://localhost:8080/static/resultstyle.css">
         <link rel="shortcut icon" href="pendu.png" />
         <title>Hangman</title>
     </head>
     <body>
+        <div class="win">Nice job !</div><br>
+        <div class="points">
+            Tu as {{.Points}} points
+        </div><br>
+        <div class="link">
+            <a href="http://localhost:8080">Retour au menu principal</a>
+        </div>
+    </body>
