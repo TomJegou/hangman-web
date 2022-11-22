@@ -1,5 +1,6 @@
 html,body{
     background: #1f2023;
+    text-align: center;
 }
 input[type="submit"]:hover {
     opacity: 0.5;
@@ -7,16 +8,23 @@ input[type="submit"]:hover {
 }
 h1{
     font-family: 'Courier New';
-    font-size: 60px;
+    font-size: 200%;
     color:beige;
     text-align: center;
+}
+p{
+    color: beige;
+    text-align: center;
+    font-family: 'Courier New';
 }
 fieldset{
     position: relative;
     top: 100px;
-    left: 8%;
-    width: 80%;
+    left: 24%;
+    width: 50%;
     padding: 20px;
+    border-radius: 5px;
+    border: 2px solid beige;
 }
 legend{
     font-family: 'Courier New';
@@ -24,24 +32,33 @@ legend{
     color:beige;
 }
 div{
+    position: relative;
+    top: 30px;
     font-family: 'Courier New';
     color:beige;
-}
-input[type="radio"]{
-    color: beige;
+    text-align: center;
 }
 label{
     font-size: 30px;
+}
+label[for="lv1"]{
+    color: #00BA1F;
+}
+label[for="lv2"]{
+    color: #FFB749;
+}
+label[for="lv3"]{
+    color: #FF4949;
 }
 input[type="submit"]{  
     position: relative;
     color: beige;
     top: 100px;
-    background-color: rgb(168, 167, 252);
-    padding: 5px;
+    background:transparent;
+    padding: 5px 10px;
     font-family: 'Courier New';
-    font-size: 50px;
-    border: 2px solid whitesmoke;
-    border-radius: 20px;
+    font-size: 250%;
+    border: 2px solid beige;
+    border-radius: 10px;
     transition: all 1s;
 }
