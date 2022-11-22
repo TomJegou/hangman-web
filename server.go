@@ -68,7 +68,6 @@ func winHandler(w http.ResponseWriter, r *http.Request) {
 
 func loseHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/lose.html")
-	Data.Word = "test"
 	t.Execute(w, Data)
 }
 
