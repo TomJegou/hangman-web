@@ -1,6 +1,5 @@
 html,body{
     background: #1f2023;
-    text-align: center;
 }
 input[type="submit"]:hover {
     opacity: 0.5;
@@ -53,12 +52,12 @@ label[for="lv3"]{
 input[type="submit"]{  
     position: relative;
     color: beige;
-    top: 100px;
+    top: 200px;
     background:transparent;
     padding: 5px 10px;
     font-family: 'Courier New';
     font-size: 250%;
     border: 2px solid beige;
     border-radius: 10px;
-    transition: all 1s;
+    transition: all 0.7s;
 }

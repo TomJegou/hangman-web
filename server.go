@@ -52,7 +52,7 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("static/startMenu.html")
+	t, _ := template.ParseFiles("static/ChoiceLvl.html")
 	t.Execute(w, Data)
 }
 
