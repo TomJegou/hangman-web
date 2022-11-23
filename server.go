@@ -72,7 +72,7 @@ func loseHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, Data)
 }
 
-func Server(wg *sync.WaitGroup) {
+func StartServer(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
 	fmt.Println("http://localhost:8080")
@@ -90,7 +90,7 @@ func Server(wg *sync.WaitGroup) {
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go Server(&wg)
+	go StartServer(&wg)
 	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 	wg.Wait()
 }
