@@ -74,6 +74,7 @@ func loseHandler(w http.ResponseWriter, r *http.Request) {
 func Server(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
+	fmt.Println("http://localhost:8080")
 	fs := http.FileServer(http.Dir("./static"))
 	http.HandleFunc("/hangman", hangHandler)
 	http.HandleFunc("/", levelHandler)
