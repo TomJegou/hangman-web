@@ -29,7 +29,7 @@ var Data Hangman_Data
 func hangHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
 	fmt.Println("Je vais parser la page")
-	t, _ := template.ParseFiles("static/hangmanweb.html")
+	t, _ := template.ParseFiles("static/html/hangmanweb.html")
 	if r.Method == "GET" {
 		Data.Level = r.FormValue("lvl")
 		fmt.Println(Data.Level)
@@ -56,18 +56,18 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("static/ChoiceLvl.html")
+	t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 	t.Execute(w, Data)
 }
 
 func winHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("static/win.html")
+	t, _ := template.ParseFiles("static/html/win.html")
 	Data.Points = src.Points(Data.Attempt, Data.Level)
 	t.Execute(w, Data)
 }
 
 func loseHandler(w http.ResponseWriter, r *http.Request) {
-	t, _ := template.ParseFiles("static/lose.html")
+	t, _ := template.ParseFiles("static/html/lose.html")
 	t.Execute(w, Data)
 }
 
