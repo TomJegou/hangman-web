@@ -23,6 +23,7 @@ var ResponseChan = make(chan string, 1)
 var LevelChan = make(chan string, 1)
 var AttemptChan = make(chan int, 1)
 var WordChan = make(chan string, 1)
+var QuitChan = make(chan bool, 1)
 
 var Data Hangman_Data
 
@@ -90,6 +91,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go Server(&wg)
-	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan)
+	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 	wg.Wait()
 }
