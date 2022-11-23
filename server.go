@@ -10,7 +10,7 @@ import (
 	"github.com/TomJegou/hangman-classic-Remy/src"
 )
 
-type Hangman struct {
+type Hangman_Data struct {
 	WordToDisplay string
 	Attempt       int
 	Points        int
@@ -24,7 +24,7 @@ var LevelChan = make(chan string, 1)
 var AttemptChan = make(chan int, 1)
 var WordChan = make(chan string, 1)
 
-var Data Hangman
+var Data Hangman_Data
 
 func hangHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
