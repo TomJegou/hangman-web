@@ -35,6 +35,7 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		Data.Level = r.FormValue("lvl")
 		LevelChan <- Data.Level
+		LevelChan <- Data.Level
 		Data.WordToDisplay = <-ResponseChan
 		InputChan <- "b0c9713aa009f4fcf39920d0d7eda80714b0c44ff2f98205278be112c755ca45e5386cbe7a9fca360ad22f06e45f80a8b8f23838725d15f889e202f5cea26359"
 		Data.Attempt = <-AttemptChan
@@ -60,9 +61,9 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
-		if levelHandlerRequestCount == 3 {
+		if levelHandlerRequestCount == 1 {
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
-		} else if levelHandlerRequestCount%3 == 0 {
+		} else {
 			QuitChan <- true
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 		}
@@ -84,10 +85,10 @@ func loseHandler(w http.ResponseWriter, r *http.Request) {
 func StartServer(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
-	fmt.Println("http://localhost:8080")
+	fmt.Println("http://localhost:8080/level")
 	fs := http.FileServer(http.Dir("./static"))
 	http.HandleFunc("/hangman", hangHandler)
-	http.HandleFunc("/", levelHandler)
+	http.HandleFunc("/level", levelHandler)
 	http.HandleFunc("/win", winHandler)
 	http.HandleFunc("/lose", loseHandler)
 	http.Handle("/static/", http.StripPrefix("/static", fs))
