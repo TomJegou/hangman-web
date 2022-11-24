@@ -65,9 +65,8 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 		} else if levelHandlerRequestCount%3 == 0 {
 			QuitChan <- true
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
-		} else {
-			levelHandlerRequestCount++
 		}
+		levelHandlerRequestCount++
 	}
 }
 
