@@ -27,8 +27,9 @@ var QuitChan = make(chan bool, 1)
 
 var Data Hangman_Data
 
+var levelHandlerRequestCount int = 1
+
 func hangHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Method)
 	fmt.Println("Je vais parser la page")
 	t, _ := template.ParseFiles("static/html/hangmanweb.html")
 	if r.Method == "GET" {
@@ -57,10 +58,16 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
 	if r.Method == "GET" {
-		QuitChan <- true
-		go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
+		if levelHandlerRequestCount == 3 {
+			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
+		} else if levelHandlerRequestCount%3 == 0 {
+			QuitChan <- true
+			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
+		} else {
+			levelHandlerRequestCount++
+		}
 	}
 }
 
@@ -94,6 +101,5 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go StartServer(&wg)
-	//go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 	wg.Wait()
 }
