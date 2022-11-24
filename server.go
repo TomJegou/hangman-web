@@ -33,7 +33,6 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/html/hangmanweb.html")
 	if r.Method == "GET" {
 		Data.Level = r.FormValue("lvl")
-		fmt.Println(Data.Level)
 		LevelChan <- Data.Level
 		Data.WordToDisplay = <-ResponseChan
 		InputChan <- "b0c9713aa009f4fcf39920d0d7eda80714b0c44ff2f98205278be112c755ca45e5386cbe7a9fca360ad22f06e45f80a8b8f23838725d15f889e202f5cea26359"
@@ -42,7 +41,6 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == "POST" {
 		InputChan <- r.FormValue("input")
 		Data.WordToDisplay = <-ResponseChan
-		fmt.Println(Data.WordToDisplay)
 		Data.Attempt = <-AttemptChan
 		if Data.WordToDisplay == "50536101b1c465eafbecc8fca26eeb18a2ac8a2f83570bade315c5a112363cdfd820acad2ab234f91d43f0db8fed0cec400a1109ad8f99c21b5b74f59e8bb00d" {
 			fmt.Println("Win")
@@ -57,10 +55,13 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
-	QuitChan <- true
-	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
-	t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
-	t.Execute(w, Data)
+	fmt.Println(r.Method)
+	if r.Method == "GET" {
+		QuitChan <- true
+		go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
+		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
+		t.Execute(w, Data)
+	}
 }
 
 func winHandler(w http.ResponseWriter, r *http.Request) {
@@ -93,6 +94,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go StartServer(&wg)
-	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
+	//go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 	wg.Wait()
 }
