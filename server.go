@@ -23,6 +23,7 @@ var ResponseChan = make(chan string, 1)
 var LevelChan = make(chan string, 1)
 var AttemptChan = make(chan int, 1)
 var WordChan = make(chan string, 1)
+var QuitChan = make(chan bool, 1)
 
 var Data Hangman_Data
 
@@ -56,7 +57,7 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
-	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan)
+	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 	t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 	t.Execute(w, Data)
 }
@@ -91,6 +92,6 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	go StartServer(&wg)
-	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan)
+	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 	wg.Wait()
 }
