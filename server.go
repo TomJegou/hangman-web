@@ -58,6 +58,7 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	QuitChan <- true
+	QuitChan <- false
 	go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
 	t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 	t.Execute(w, Data)
