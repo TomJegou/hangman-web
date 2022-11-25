@@ -10,22 +10,23 @@ import (
 	"github.com/TomJegou/hangman-classic-Remy/src"
 )
 
-type ListeUtilisateur struct {
-	Liste []Utilisateur
-}
-
-type Utilisateur struct {
+// Structures
+type Users struct {
 	Nom    string
 	Mdp    string
 	Points int
 }
 
+type UserList struct {
+	Liste []Users
+}
 type Hangman_Data struct {
 	WordToDisplay, Level, Word   string
 	Points, TotalPoints, Attempt int
 	UsedLetters                  []string
 }
 
+// Channels
 var InputChan = make(chan string, 1)
 var ResponseChan = make(chan string, 1)
 var LevelChan = make(chan string, 1)
@@ -34,10 +35,13 @@ var WordChan = make(chan string, 1)
 var QuitChan = make(chan bool, 1)
 var UsedLettersChan = make(chan []string, 1)
 
+// Global Variables
 var Data Hangman_Data
+var User_list UserList
 
 var levelHandlerRequestCount int = 1
 
+// Functions Handlers
 func hangHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Je vais parser la page")
 	t, _ := template.ParseFiles("static/html/hangmanweb.html")
@@ -115,15 +119,17 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	if request == "continuez en tant qu'invité" {
 		Data.TotalPoints = 0
 		http.Redirect(w, r, "/level", http.StatusFound)
+	} else {
+		fmt.Println(request)
+		t, err := template.ParseFiles("static/html/register.html")
+		if err != nil {
+			log.Fatal(err)
+		}
+		t.Execute(w, Data)
 	}
-	fmt.Println(request)
-	t, err := template.ParseFiles("static/html/register.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	t.Execute(w, Data)
 }
 
+// Functions
 func StartServer(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
