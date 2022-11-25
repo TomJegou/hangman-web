@@ -150,7 +150,7 @@ func StartServer(wg *sync.WaitGroup) {
 	}
 }
 
-func saveUser(name string, passwd string, points int) {
+func saveUserList(name string, passwd string, points int) {
 	user := &User{Name: name, Passwd: passwd, Points: points}
 	User_list.List = append(User_list.List, *user)
 	bytevalue, err := json.MarshalIndent(User_list, "", "	")
@@ -160,7 +160,7 @@ func saveUser(name string, passwd string, points int) {
 	os.WriteFile("db/accounts.json", bytevalue, 0644)
 }
 
-func loadSave() {
+func loadUserList() {
 	userListTmp := &UserList{}
 	bytevalue, err := os.ReadFile("db/accounts.json")
 	if err != nil {
