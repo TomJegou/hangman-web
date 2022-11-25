@@ -114,9 +114,9 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	request := r.FormValue("register")
-	if request == "continuez en invité" {
+	// if request == "continuez en invité" {
 
-	}
+	// }
 	fmt.Println(request)
 	t, err := template.ParseFiles("static/html/register.html")
 	if err != nil {
