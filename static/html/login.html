@@ -9,6 +9,7 @@
     <body>
          <div class="box">
             <form class="formBloc" action="/level">
+                <p>{{.ErrorLogin}}</p>
                 <h3><strong>Identifiez</strong>-vous</h3>
                 <div class="formGroupe">
                     <label for="Utilisateur">Nom d'utilisateur</label>
@@ -18,16 +19,13 @@
                     <label for="mdp">Mot de passe</label>
                     <input type="password" id="mdp" name="password" required>
                 </div>
-                <p>{{.ErrorLogin}}</p>
                 <div class="formGroupe">
-                    <input type="submit" value="Connectez-vous" class="buttonSub">
+                    <input type="submit" value="Se connectez" class="buttonSub">
                 </div>
             </form>
             <form action="/register">
                 <div class="formGroupe">
-                    <input type="submit" value="enregistrez-vous" name="register" class="buttonSub">
-                </div>
-                <div class="formGroupe">
+                    <input type="submit" value="S'enregistrer" name="register" class="buttonSub">
                     <input type="submit" value="continuez en tant qu'invité" name="register" class="buttonSub">
                 </div>
             </form>
