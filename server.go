@@ -87,6 +87,7 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 					Current_User.Name = username
 					Current_User.Passwd = password
 					Current_User.Points = User_list.List[index].Points
+					Data.TotalPoints = Current_User.Points
 					levelHandlerRequestCount = 1
 					Logged = true
 				} else {
@@ -116,6 +117,8 @@ func winHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/html/win.html")
 	Data.Points = src.Points(Data.Attempt, Data.Level)
 	Data.TotalPoints += Data.Points
+	Current_User.Points = Data.TotalPoints
+	saveUserList()
 	t.Execute(w, Data)
 }
 
@@ -146,7 +149,6 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		Data.TotalPoints = 0
 		http.Redirect(w, r, "/level", http.StatusFound)
 	} else {
-		fmt.Println(request)
 		t, err := template.ParseFiles("static/html/register.html")
 		if err != nil {
 			log.Fatal(err)
