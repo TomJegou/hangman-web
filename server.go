@@ -41,7 +41,7 @@ var UsedLettersChan = make(chan []string, 1)
 var Current_User User
 var Data Hangman_Data
 var User_list UserList
-var levelHandlerRequestCount int = 1
+var levelHandlerRequestCount int = 0
 
 // Functions Handlers
 func hangHandler(w http.ResponseWriter, r *http.Request) {
@@ -76,6 +76,25 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
 	if r.Method == "GET" {
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+		loadUserList()
+		if UserExists(User_list.List, username) {
+			if User_list.List[username].Passwd == password {
+				Current_User.Name = username
+				Current_User.Passwd = password
+				Current_User.Points = User_list.List[username].Points
+				levelHandlerRequestCount = 1
+			} else {
+				Data.ErrorLogin = "Wrong Password"
+				levelHandlerRequestCount = 0
+				http.Redirect(w, r, "/login", http.StatusFound)
+			}
+		} else {
+			Data.ErrorLogin = "User don't exists"
+			levelHandlerRequestCount = 0
+			http.Redirect(w, r, "/login", http.StatusFound)
+		}
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
 		if levelHandlerRequestCount == 1 {
@@ -136,6 +155,7 @@ func registerOperationHandler(w http.ResponseWriter, r *http.Request) {
 	Current_User.Passwd = r.FormValue("password")
 	Current_User.Points = 0
 	User_list.List[Current_User.Name] = Current_User
+	saveUserList()
 	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
@@ -177,6 +197,15 @@ func loadUserList() {
 	for key, element := range userListTmp.List {
 		User_list.List[key] = element
 	}
+}
+
+func UserExists(userlist map[string]User, username string) bool {
+	for key := range userlist {
+		if key == username {
+			return true
+		}
+	}
+	return false
 }
 
 func main() {
