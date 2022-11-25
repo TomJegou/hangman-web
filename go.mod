@@ -2,6 +2,4 @@ module hangman-web
 
 go 1.18
 
-replace hangman => ../hangman
-
-require hangman v0.0.0-00010101000000-000000000000
+require github.com/TomJegou/hangman-classic-Remy v0.0.0-20221124155033-24bf64413a9a
