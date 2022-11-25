@@ -1,9 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"sync"
 	"text/template"
 
@@ -11,19 +13,19 @@ import (
 )
 
 // Structures
-type Users struct {
-	Nom    string
-	Mdp    string
+type User struct {
+	Name   string
+	Passwd string
 	Points int
 }
 
 type UserList struct {
-	Liste []Users
+	List []User
 }
 type Hangman_Data struct {
-	WordToDisplay, Level, Word   string
-	Points, TotalPoints, Attempt int
-	UsedLetters                  []string
+	WordToDisplay, Level, Word, ErrorLogin string
+	Points, TotalPoints, Attempt           int
+	UsedLetters                            []string
 }
 
 // Channels
@@ -148,13 +150,25 @@ func StartServer(wg *sync.WaitGroup) {
 	}
 }
 
-// func save() {
+func saveUser(name string, passwd string, points int) {
+	user := &User{Name: name, Passwd: passwd, Points: points}
+	User_list.List = append(User_list.List, *user)
+	bytevalue, err := json.MarshalIndent(User_list, "", "	")
+	if err != nil {
+		log.Fatal(err)
+	}
+	os.WriteFile("db/accounts.json", bytevalue, 0644)
+}
 
-// }
-
-// func loadSave() {
-
-// }
+func loadSave() {
+	userListTmp := &UserList{}
+	bytevalue, err := os.ReadFile("db/accounts.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+	json.Unmarshal(bytevalue, &userListTmp)
+	User_list.List = append(User_list.List, userListTmp.List...)
+}
 
 func main() {
 	var wg sync.WaitGroup
