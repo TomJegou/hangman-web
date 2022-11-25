@@ -112,6 +112,7 @@ func StartServer(wg *sync.WaitGroup) {
 	http.HandleFunc("/win", winHandler)
 	http.HandleFunc("/lose", loseHandler)
 	http.HandleFunc("/menu", menuHandler)
+	http.HandleFunc("/login", loginHandler)
 	http.Handle("/static/", http.StripPrefix("/static", fs))
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
