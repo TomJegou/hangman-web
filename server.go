@@ -43,6 +43,7 @@ var Data Hangman_Data
 var User_list UserList
 var levelHandlerRequestCount int = 0
 var Logged = false
+var IndexUserList int = 0
 
 // Functions Handlers
 func hangHandler(w http.ResponseWriter, r *http.Request) {
@@ -84,6 +85,7 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 			exist, index := UserExists(User_list.List, username)
 			if exist {
 				if User_list.List[index].Passwd == password {
+					IndexUserList = index
 					Current_User.Name = username
 					Current_User.Passwd = password
 					Current_User.Points = User_list.List[index].Points
@@ -118,7 +120,7 @@ func winHandler(w http.ResponseWriter, r *http.Request) {
 	Data.Points = src.Points(Data.Attempt, Data.Level)
 	Data.TotalPoints += Data.Points
 	Current_User.Points = Data.TotalPoints
-	saveUserList()
+	savePoints()
 	t.Execute(w, Data)
 }
 
@@ -215,6 +217,10 @@ func UserExists(userlist []User, username string) (bool, int) {
 		}
 	}
 	return false, 0
+}
+
+func savePoints() {
+	User_list.List[IndexUserList].Points = Current_User.Points
 }
 
 func main() {
