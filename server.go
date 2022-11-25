@@ -77,7 +77,7 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 
 func winHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/html/win.html")
-	Data.Points = src.Points(Data.Attempt, Data.Level)
+	Data.Points += src.Points(Data.Attempt, Data.Level)
 	t.Execute(w, Data)
 }
 
@@ -86,15 +86,32 @@ func loseHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, Data)
 }
 
+func menuHandler(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("static/html/menu.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	t.Execute(w, Data)
+}
+
+func loginHandler(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("static/html/login.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	t.Execute(w, Data)
+}
+
 func StartServer(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
-	fmt.Println("http://localhost:8080/level")
+	fmt.Println("http://localhost:8080/menu")
 	fs := http.FileServer(http.Dir("./static"))
 	http.HandleFunc("/hangman", hangHandler)
 	http.HandleFunc("/level", levelHandler)
 	http.HandleFunc("/win", winHandler)
 	http.HandleFunc("/lose", loseHandler)
+	http.HandleFunc("/menu", menuHandler)
 	http.Handle("/static/", http.StripPrefix("/static", fs))
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
