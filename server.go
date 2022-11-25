@@ -21,12 +21,9 @@ type Utilisateur struct {
 }
 
 type Hangman_Data struct {
-	WordToDisplay string
-	Attempt       int
-	Points        int
-	Level         string
-	Word          string
-	UsedLetters   []string
+	WordToDisplay, Level, Word   string
+	Points, TotalPoints, Attempt int
+	UsedLetters                  []string
 }
 
 var InputChan = make(chan string, 1)
@@ -87,7 +84,8 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 
 func winHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/html/win.html")
-	Data.Points += src.Points(Data.Attempt, Data.Level)
+	Data.Points = src.Points(Data.Attempt, Data.Level)
+	Data.TotalPoints += Data.Points
 	t.Execute(w, Data)
 }
 
@@ -114,9 +112,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	request := r.FormValue("register")
-	// if request == "continuez en invité" {
-
-	// }
+	if request == "continuez en tant qu'invité" {
+		Data.TotalPoints = 0
+		http.Redirect(w, r, "/level", http.StatusFound)
+	}
 	fmt.Println(request)
 	t, err := template.ParseFiles("static/html/register.html")
 	if err != nil {
@@ -143,13 +142,13 @@ func StartServer(wg *sync.WaitGroup) {
 	}
 }
 
-func save() {
+// func save() {
 
-}
+// }
 
-func loadSave() {
+// func loadSave() {
 
-}
+// }
 
 func main() {
 	var wg sync.WaitGroup
