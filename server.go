@@ -10,6 +10,16 @@ import (
 	"github.com/TomJegou/hangman-classic-Remy/src"
 )
 
+type ListeUtilisateur struct {
+	Liste []Utilisateur
+}
+
+type Utilisateur struct {
+	Nom    string
+	Mdp    string
+	Points int
+}
+
 type Hangman_Data struct {
 	WordToDisplay string
 	Attempt       int
@@ -103,6 +113,11 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
+	request := r.FormValue("register")
+	if request == "continuez en invité" {
+
+	}
+	fmt.Println(request)
 	t, err := template.ParseFiles("static/html/register.html")
 	if err != nil {
 		log.Fatal(err)
@@ -126,6 +141,14 @@ func StartServer(wg *sync.WaitGroup) {
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func save() {
+
+}
+
+func loadSave() {
+
 }
 
 func main() {
