@@ -93,6 +93,7 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 					Data.TotalPoints = Current_User.Points
 					levelHandlerRequestCount = 1
 					Logged = true
+					GuestMod = false
 				} else {
 					Data.ErrorLogin = "Wrong Password"
 					levelHandlerRequestCount = 0
@@ -151,8 +152,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	request := r.FormValue("register")
-	if request == "continuez en tant qu'invité" {
+	if request == "continuer en tant qu'invité" {
+		levelHandlerRequestCount = 1
 		Data.TotalPoints = 0
+		Current_User.Name = "Guest"
+		Current_User.Passwd = "guest"
+		Current_User.Points = 0
 		http.Redirect(w, r, "/level", http.StatusFound)
 		Logged = true
 		GuestMod = true
@@ -166,17 +171,11 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerOperationHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Entering in registeroperationhandler")
 	Current_User.Name = r.FormValue("username")
-	fmt.Println(Current_User.Name)
 	Current_User.Passwd = r.FormValue("password")
-	fmt.Println(Current_User.Passwd)
 	Current_User.Points = 0
-	fmt.Println(User_list.List)
 	User_list.List = append(User_list.List, Current_User)
-	fmt.Println(User_list.List)
 	saveUserList()
-	fmt.Println("You're gonna be redirected to /login")
 	http.Redirect(w, r, "/login", http.StatusFound)
 }
 

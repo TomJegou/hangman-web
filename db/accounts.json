@@ -1,0 +1,14 @@
+{
+	"List": [
+		{
+			"Name": "Tom",
+			"Passwd": "Tom",
+			"Points": 10
+		},
+		{
+			"Name": "lol",
+			"Passwd": "lol",
+			"Points": 0
+		}
+	]
+}
