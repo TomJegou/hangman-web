@@ -16,6 +16,7 @@ type Hangman_Data struct {
 	Points        int
 	Level         string
 	Word          string
+	UsedLetters   []string
 }
 
 var InputChan = make(chan string, 1)
@@ -24,6 +25,7 @@ var LevelChan = make(chan string, 1)
 var AttemptChan = make(chan int, 1)
 var WordChan = make(chan string, 1)
 var QuitChan = make(chan bool, 1)
+var UsedLettersChan = make(chan []string, 1)
 
 var Data Hangman_Data
 
@@ -37,10 +39,13 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 		LevelChan <- Data.Level
 		Data.WordToDisplay = <-ResponseChan
 		InputChan <- "b0c9713aa009f4fcf39920d0d7eda80714b0c44ff2f98205278be112c755ca45e5386cbe7a9fca360ad22f06e45f80a8b8f23838725d15f889e202f5cea26359"
+		Data.UsedLetters = <-UsedLettersChan
+		InputChan <- "b0c9713aa009f4fcf39920d0d7eda80714b0c44ff2f98205278be112c755ca45e5386cbe7a9fca360ad22f06e45f80a8b8f23838725d15f889e202f5cea26359"
 		Data.Attempt = <-AttemptChan
 		t.Execute(w, Data)
 	} else if r.Method == "POST" {
 		InputChan <- r.FormValue("input")
+		Data.UsedLetters = <-UsedLettersChan
 		Data.WordToDisplay = <-ResponseChan
 		Data.Attempt = <-AttemptChan
 		if Data.WordToDisplay == "50536101b1c465eafbecc8fca26eeb18a2ac8a2f83570bade315c5a112363cdfd820acad2ab234f91d43f0db8fed0cec400a1109ad8f99c21b5b74f59e8bb00d" {
@@ -61,10 +66,10 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
 		if levelHandlerRequestCount == 1 {
-			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
+			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
 		} else {
 			QuitChan <- true
-			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan)
+			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
 		}
 		levelHandlerRequestCount++
 	}

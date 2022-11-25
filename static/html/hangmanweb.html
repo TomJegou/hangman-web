@@ -17,6 +17,7 @@
             <div class="attempt">
                 Il te reste {{.Attempt}} essai(s)
             </div>
+            <p>{{range .UsedLetters}}</p>
             <form class="form">
                 <input type="text" name="input" placeholder="choisissez votre lettre" minlenght="0" maxlenght="1">
                 <input type="submit" value="Essaye !" formmethod="post">
