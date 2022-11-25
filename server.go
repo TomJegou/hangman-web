@@ -121,6 +121,7 @@ func winHandler(w http.ResponseWriter, r *http.Request) {
 	Data.TotalPoints += Data.Points
 	Current_User.Points = Data.TotalPoints
 	savePoints()
+	saveUserList()
 	t.Execute(w, Data)
 }
 
