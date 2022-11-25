@@ -102,6 +102,14 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, Data)
 }
 
+func registerHandler(w http.ResponseWriter, r *http.Request) {
+	t, err := template.ParseFiles("static/html/register.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	t.Execute(w, Data)
+}
+
 func StartServer(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
@@ -113,6 +121,7 @@ func StartServer(wg *sync.WaitGroup) {
 	http.HandleFunc("/lose", loseHandler)
 	http.HandleFunc("/menu", menuHandler)
 	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/register", registerHandler)
 	http.Handle("/static/", http.StripPrefix("/static", fs))
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
