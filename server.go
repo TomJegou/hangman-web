@@ -20,7 +20,7 @@ type User struct {
 }
 
 type UserList struct {
-	List map[string]User
+	List []User
 }
 type Hangman_Data struct {
 	WordToDisplay, Level, Word, ErrorLogin string
@@ -42,6 +42,7 @@ var Current_User User
 var Data Hangman_Data
 var User_list UserList
 var levelHandlerRequestCount int = 0
+var Logged = false
 
 // Functions Handlers
 func hangHandler(w http.ResponseWriter, r *http.Request) {
@@ -76,24 +77,28 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
 	if r.Method == "GET" {
-		username := r.FormValue("username")
-		password := r.FormValue("password")
-		loadUserList()
-		if UserExists(User_list.List, username) {
-			if User_list.List[username].Passwd == password {
-				Current_User.Name = username
-				Current_User.Passwd = password
-				Current_User.Points = User_list.List[username].Points
-				levelHandlerRequestCount = 1
+		if !Logged {
+			username := r.FormValue("username")
+			password := r.FormValue("password")
+			loadUserList()
+			exist, index := UserExists(User_list.List, username)
+			if exist {
+				if User_list.List[index].Passwd == password {
+					Current_User.Name = username
+					Current_User.Passwd = password
+					Current_User.Points = User_list.List[index].Points
+					levelHandlerRequestCount = 1
+					Logged = true
+				} else {
+					Data.ErrorLogin = "Wrong Password"
+					levelHandlerRequestCount = 0
+					http.Redirect(w, r, "/login", http.StatusFound)
+				}
 			} else {
-				Data.ErrorLogin = "Wrong Password"
+				Data.ErrorLogin = "User don't exists"
 				levelHandlerRequestCount = 0
 				http.Redirect(w, r, "/login", http.StatusFound)
 			}
-		} else {
-			Data.ErrorLogin = "User don't exists"
-			levelHandlerRequestCount = 0
-			http.Redirect(w, r, "/login", http.StatusFound)
 		}
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
@@ -158,7 +163,7 @@ func registerOperationHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(Current_User.Passwd)
 	Current_User.Points = 0
 	fmt.Println(User_list.List)
-	User_list.List[Current_User.Name] = Current_User
+	User_list.List = append(User_list.List, Current_User)
 	fmt.Println(User_list.List)
 	saveUserList()
 	fmt.Println("You're gonna be redirected to /login")
@@ -194,24 +199,20 @@ func saveUserList() {
 }
 
 func loadUserList() {
-	userListTmp := &UserList{}
 	bytevalue, err := os.ReadFile("db/accounts.json")
 	if err != nil {
 		log.Fatal(err)
 	}
-	json.Unmarshal(bytevalue, &userListTmp)
-	for key, element := range userListTmp.List {
-		User_list.List[key] = element
-	}
+	json.Unmarshal(bytevalue, &User_list)
 }
 
-func UserExists(userlist map[string]User, username string) bool {
-	for key := range userlist {
-		if key == username {
-			return true
+func UserExists(userlist []User, username string) (bool, int) {
+	for index, elements := range userlist {
+		if elements.Name == username {
+			return true, index
 		}
 	}
-	return false
+	return false, 0
 }
 
 func main() {
