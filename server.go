@@ -44,6 +44,7 @@ var User_list UserList
 var levelHandlerRequestCount int = 0
 var Logged = false
 var IndexUserList int = 0
+var GuestMod bool = false
 
 // Functions Handlers
 func hangHandler(w http.ResponseWriter, r *http.Request) {
@@ -120,8 +121,10 @@ func winHandler(w http.ResponseWriter, r *http.Request) {
 	Data.Points = src.Points(Data.Attempt, Data.Level)
 	Data.TotalPoints += Data.Points
 	Current_User.Points = Data.TotalPoints
-	savePoints()
-	saveUserList()
+	if !GuestMod {
+		saveUserList()
+		savePoints()
+	}
 	t.Execute(w, Data)
 }
 
@@ -151,6 +154,8 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	if request == "continuez en tant qu'invité" {
 		Data.TotalPoints = 0
 		http.Redirect(w, r, "/level", http.StatusFound)
+		Logged = true
+		GuestMod = true
 	} else {
 		t, err := template.ParseFiles("static/html/register.html")
 		if err != nil {
