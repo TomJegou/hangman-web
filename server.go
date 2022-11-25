@@ -151,11 +151,17 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func registerOperationHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Entering in registeroperationhandler")
 	Current_User.Name = r.FormValue("username")
+	fmt.Println(Current_User.Name)
 	Current_User.Passwd = r.FormValue("password")
+	fmt.Println(Current_User.Passwd)
 	Current_User.Points = 0
+	fmt.Println(User_list.List)
 	User_list.List[Current_User.Name] = Current_User
+	fmt.Println(User_list.List)
 	saveUserList()
+	fmt.Println("You're gonna be redirected to /login")
 	http.Redirect(w, r, "/login", http.StatusFound)
 }
 
