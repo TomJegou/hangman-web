@@ -20,7 +20,7 @@ type User struct {
 }
 
 type UserList struct {
-	List []User
+	List map[string]User
 }
 type Hangman_Data struct {
 	WordToDisplay, Level, Word, ErrorLogin string
@@ -38,9 +38,9 @@ var QuitChan = make(chan bool, 1)
 var UsedLettersChan = make(chan []string, 1)
 
 // Global Variables
+var Current_User User
 var Data Hangman_Data
 var User_list UserList
-
 var levelHandlerRequestCount int = 1
 
 // Functions Handlers
@@ -131,12 +131,21 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func registerOperationHandler(w http.ResponseWriter, r *http.Request) {
+	Current_User.Name = r.FormValue("username")
+	Current_User.Passwd = r.FormValue("password")
+	Current_User.Points = 0
+	User_list.List[Current_User.Name] = Current_User
+	http.Redirect(w, r, "/login", http.StatusFound)
+}
+
 // Functions
 func StartServer(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
 	fmt.Println("http://localhost:8080/menu")
 	fs := http.FileServer(http.Dir("./static"))
+	http.HandleFunc("/registeroperation", registerOperationHandler)
 	http.HandleFunc("/hangman", hangHandler)
 	http.HandleFunc("/level", levelHandler)
 	http.HandleFunc("/win", winHandler)
@@ -150,9 +159,7 @@ func StartServer(wg *sync.WaitGroup) {
 	}
 }
 
-func saveUserList(name string, passwd string, points int) {
-	user := &User{Name: name, Passwd: passwd, Points: points}
-	User_list.List = append(User_list.List, *user)
+func saveUserList() {
 	bytevalue, err := json.MarshalIndent(User_list, "", "	")
 	if err != nil {
 		log.Fatal(err)
@@ -167,7 +174,9 @@ func loadUserList() {
 		log.Fatal(err)
 	}
 	json.Unmarshal(bytevalue, &userListTmp)
-	User_list.List = append(User_list.List, userListTmp.List...)
+	for key, element := range userListTmp.List {
+		User_list.List[key] = element
+	}
 }
 
 func main() {
