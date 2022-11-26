@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"hangman-web/src"
 	"os"
 	"strings"
+	"sync"
 )
 
 func main() {
@@ -17,9 +18,9 @@ func main() {
 		srcpath += t[i] + "/"
 	}
 	srcpath = srcpath[1:]
-	fmt.Println(srcpath) // change the current working directory
-	// var wg sync.WaitGroup
-	// wg.Add(1)
-	// go src.StartServer(&wg)
-	// wg.Wait()
+	os.Chdir(srcpath) // change the current working directory
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go src.StartServer(&wg)
+	wg.Wait()
 }
