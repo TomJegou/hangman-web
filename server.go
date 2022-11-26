@@ -154,7 +154,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	request := r.FormValue("register")
 	if request == "continuer en tant qu'invité" {
-		runningHangmanCount = 0
 		Data.TotalPoints = 0
 		Current_User.Name = "Guest"
 		Current_User.Passwd = "guest"
