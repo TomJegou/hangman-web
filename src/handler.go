@@ -10,7 +10,6 @@ import (
 )
 
 // Structures
-
 type Hangman_Data struct {
 	WordToDisplay, Level, Word, ErrorLogin string
 	Points, TotalPoints, Attempt           int
@@ -18,7 +17,6 @@ type Hangman_Data struct {
 }
 
 // Global Variables
-
 var Data Hangman_Data
 var runningHangmanCount int = 0
 var Logged = false
@@ -35,8 +33,9 @@ var QuitChan = make(chan bool, 1)
 var UsedLettersChan = make(chan []string, 1)
 
 // Functions Handlers
+
+/*This HandlerFunc is used to establish a connection and communicate with the hangman goroutine*/
 func hangHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Je vais parser la page")
 	t, _ := template.ParseFiles("static/html/hangmanweb.html")
 	if r.Method == "GET" {
 		if runningHangmanCount == 0 {
@@ -68,31 +67,10 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*Handle the selection levels before starting the hangman*/
 func levelHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Method)
 	if r.Method == "GET" {
-		if !Logged {
-			username := r.FormValue("username")
-			password := r.FormValue("password")
-			exist, index := UserExists(User_list.List, username)
-			if exist {
-				if User_list.List[index].Passwd == password {
-					IndexUserList = index
-					Current_User.Name = username
-					Current_User.Passwd = password
-					Current_User.Points = User_list.List[index].Points
-					Data.TotalPoints = Current_User.Points
-					Logged = true
-					GuestMod = false
-				} else {
-					Data.ErrorLogin = "Wrong Password"
-					http.Redirect(w, r, "/login", http.StatusFound)
-				}
-			} else {
-				Data.ErrorLogin = "User don't exists"
-				http.Redirect(w, r, "/login", http.StatusFound)
-			}
-		}
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
 		if runningHangmanCount == 1 {
@@ -137,6 +115,35 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, Data)
 }
 
+func checkCredentialsHandler(w http.ResponseWriter, r *http.Request) {
+	if !Logged {
+		username := r.FormValue("username")
+		password := r.FormValue("password")
+		exist, index := UserExists(User_list.List, username)
+		if exist {
+			if User_list.List[index].Passwd == password {
+				IndexUserList = index
+				Current_User.Name = username
+				Current_User.Passwd = password
+				Current_User.Points = User_list.List[index].Points
+				Data.TotalPoints = Current_User.Points
+				Logged = true
+				GuestMod = false
+			} else {
+				Data.ErrorLogin = "Wrong Password"
+				http.Redirect(w, r, "/login", http.StatusFound)
+			}
+		} else {
+			Data.ErrorLogin = "User don't exists"
+			http.Redirect(w, r, "/login", http.StatusFound)
+		}
+	}
+	if Logged {
+		Data.ErrorLogin = ""
+		http.Redirect(w, r, "/level", http.StatusFound)
+	}
+}
+
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	request := r.FormValue("register")
 	if request == "continuer en tant qu'invité" {
@@ -144,9 +151,10 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		Current_User.Name = "Guest"
 		Current_User.Passwd = "guest"
 		Current_User.Points = 0
-		http.Redirect(w, r, "/level", http.StatusFound)
+		Data.ErrorLogin = ""
 		Logged = true
 		GuestMod = true
+		http.Redirect(w, r, "/level", http.StatusFound)
 	} else {
 		t, err := template.ParseFiles("static/html/register.html")
 		if err != nil {
