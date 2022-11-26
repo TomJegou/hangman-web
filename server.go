@@ -41,7 +41,7 @@ var UsedLettersChan = make(chan []string, 1)
 var Current_User User
 var Data Hangman_Data
 var User_list UserList
-var runningHangmanCount int = -1
+var runningHangmanCount int = 0
 var Logged = false
 var IndexUserList int = 0
 var GuestMod bool = false
@@ -51,6 +51,8 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Je vais parser la page")
 	t, _ := template.ParseFiles("static/html/hangmanweb.html")
 	if r.Method == "GET" {
+		go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
+		runningHangmanCount = 1
 		Data.Level = r.FormValue("lvl")
 		LevelChan <- Data.Level
 		Data.WordToDisplay = <-ResponseChan
@@ -90,28 +92,21 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 					Current_User.Passwd = password
 					Current_User.Points = User_list.List[index].Points
 					Data.TotalPoints = Current_User.Points
-					runningHangmanCount = 0
 					Logged = true
 					GuestMod = false
 				} else {
 					Data.ErrorLogin = "Wrong Password"
-					runningHangmanCount = -1
 					http.Redirect(w, r, "/login", http.StatusFound)
 				}
 			} else {
 				Data.ErrorLogin = "User don't exists"
-				runningHangmanCount = -1
 				http.Redirect(w, r, "/login", http.StatusFound)
 			}
 		}
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
-		if runningHangmanCount == 0 {
-			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
-			runningHangmanCount = 1
-		} else if runningHangmanCount == 1 {
+		if runningHangmanCount == 1 {
 			QuitChan <- true
-			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
 		}
 	}
 }
