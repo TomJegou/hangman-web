@@ -17,7 +17,7 @@ type UserList struct {
 	List []User
 }
 
-// Global Variables
+// Global Variables section
 var Current_User User
 var User_list UserList
 

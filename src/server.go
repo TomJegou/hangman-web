@@ -1,6 +1,6 @@
 package src
 
-//Import section
+//Imports section
 import (
 	"fmt"
 	"log"
