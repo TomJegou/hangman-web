@@ -51,8 +51,10 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Je vais parser la page")
 	t, _ := template.ParseFiles("static/html/hangmanweb.html")
 	if r.Method == "GET" {
-		go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
-		runningHangmanCount = 1
+		if runningHangmanCount == 0 {
+			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
+			runningHangmanCount = 1
+		}
 		Data.Level = r.FormValue("lvl")
 		LevelChan <- Data.Level
 		Data.WordToDisplay = <-ResponseChan
@@ -107,6 +109,7 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 		t.Execute(w, Data)
 		if runningHangmanCount == 1 {
 			QuitChan <- true
+			runningHangmanCount = 0
 		}
 	}
 }
