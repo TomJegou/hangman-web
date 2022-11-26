@@ -82,7 +82,6 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 		if !Logged {
 			username := r.FormValue("username")
 			password := r.FormValue("password")
-			loadUserList()
 			exist, index := UserExists(User_list.List, username)
 			if exist {
 				if User_list.List[index].Passwd == password {
@@ -143,6 +142,7 @@ func menuHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	loadUserList()
 	t, err := template.ParseFiles("static/html/login.html")
 	if err != nil {
 		log.Fatal(err)
