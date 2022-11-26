@@ -1,5 +1,6 @@
 package src
 
+//Import section
 import (
 	"fmt"
 	"log"
@@ -7,7 +8,7 @@ import (
 	"sync"
 )
 
-// Functions to start the server
+/*Establish all the routing for the web-app and start the server*/
 func StartServer(wg *sync.WaitGroup) {
 	defer wg.Done()
 	fmt.Println("The server is Running")
