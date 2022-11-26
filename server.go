@@ -142,6 +142,7 @@ func menuHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
+	Logged = false
 	loadUserList()
 	t, err := template.ParseFiles("static/html/login.html")
 	if err != nil {
