@@ -41,7 +41,7 @@ var UsedLettersChan = make(chan []string, 1)
 var Current_User User
 var Data Hangman_Data
 var User_list UserList
-var runningHangmanCount int = 0
+var runningHangmanCount int = -1
 var Logged = false
 var IndexUserList int = 0
 var GuestMod bool = false
@@ -66,6 +66,13 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 		Data.Attempt = <-AttemptChan
 		if Data.WordToDisplay == "50536101b1c465eafbecc8fca26eeb18a2ac8a2f83570bade315c5a112363cdfd820acad2ab234f91d43f0db8fed0cec400a1109ad8f99c21b5b74f59e8bb00d" {
 			fmt.Println("Win")
+			Data.Points = src.Points(Data.Attempt, Data.Level)
+			Data.TotalPoints += Data.Points
+			Current_User.Points = Data.TotalPoints
+			if !GuestMod {
+				savePoints()
+				saveUserList()
+			}
 			http.Redirect(w, r, "/win", http.StatusFound)
 		} else if Data.WordToDisplay == "889ce65f137b3b9aa1005f417d7972c948b8bb6360cbdd4118cb05a29d37905744fc0dbc3d17c1de02689d837bfea5bb8114a994f9c1a53dddb993139ab2974c" {
 			fmt.Println("Lose")
@@ -91,41 +98,34 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 					Current_User.Passwd = password
 					Current_User.Points = User_list.List[index].Points
 					Data.TotalPoints = Current_User.Points
-					runningHangmanCount = 1
+					runningHangmanCount = 0
 					Logged = true
 					GuestMod = false
 				} else {
 					Data.ErrorLogin = "Wrong Password"
-					runningHangmanCount = 0
+					runningHangmanCount = -1
 					http.Redirect(w, r, "/login", http.StatusFound)
 				}
 			} else {
 				Data.ErrorLogin = "User don't exists"
-				runningHangmanCount = 0
+				runningHangmanCount = -1
 				http.Redirect(w, r, "/login", http.StatusFound)
 			}
 		}
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
-		if runningHangmanCount == 1 {
+		if runningHangmanCount == 0 {
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
+			runningHangmanCount = 1
 		} else {
 			QuitChan <- true
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
 		}
-		runningHangmanCount++
 	}
 }
 
 func winHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/html/win.html")
-	Data.Points = src.Points(Data.Attempt, Data.Level)
-	Data.TotalPoints += Data.Points
-	Current_User.Points = Data.TotalPoints
-	if !GuestMod {
-		saveUserList()
-		savePoints()
-	}
 	t.Execute(w, Data)
 }
 
@@ -153,7 +153,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	request := r.FormValue("register")
 	if request == "continuer en tant qu'invité" {
-		runningHangmanCount = 1
+		runningHangmanCount = 0
 		Data.TotalPoints = 0
 		Current_User.Name = "Guest"
 		Current_User.Passwd = "guest"
