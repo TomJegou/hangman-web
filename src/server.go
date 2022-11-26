@@ -13,6 +13,7 @@ func StartServer(wg *sync.WaitGroup) {
 	fmt.Println("The server is Running")
 	fmt.Println("http://localhost:8080/menu")
 	fs := http.FileServer(http.Dir("./static"))
+	http.HandleFunc("/checkCredentials", checkCredentialsHandler)
 	http.HandleFunc("/registeroperation", registerOperationHandler)
 	http.HandleFunc("/hangman", hangHandler)
 	http.HandleFunc("/level", levelHandler)
