@@ -9,21 +9,21 @@ import (
 	"github.com/TomJegou/hangman-classic-Remy/src"
 )
 
-// Structures
+// Structures section
 type Hangman_Data struct {
 	WordToDisplay, Level, Word, ErrorLogin string
 	Points, TotalPoints, Attempt           int
 	UsedLetters                            []string
 }
 
-// Global Variables
+// Global Variables section
 var Data Hangman_Data
 var runningHangmanCount int = 0
 var Logged = false
 var IndexUserList int = 0
 var GuestMod bool = false
 
-// Channels
+// Channels section
 var InputChan = make(chan string, 1)
 var ResponseChan = make(chan string, 1)
 var LevelChan = make(chan string, 1)
@@ -32,7 +32,7 @@ var WordChan = make(chan string, 1)
 var QuitChan = make(chan bool, 1)
 var UsedLettersChan = make(chan []string, 1)
 
-// Functions Handlers
+//Handler functions section
 
 /*This HandlerFunc is used to establish a connection and communicate with the hangman goroutine*/
 func hangHandler(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +69,6 @@ func hangHandler(w http.ResponseWriter, r *http.Request) {
 
 /*Handle the selection levels before starting the hangman*/
 func levelHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.Method)
 	if r.Method == "GET" {
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
@@ -80,6 +79,12 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+Handle the win html page at the endgame
+Also add the points to the Current user and then if
+the current user isn't the guest session then it also save the points
+to the accounts.json files
+*/
 func winHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/html/win.html")
 	Data.Points = src.Points(Data.Attempt, Data.Level)
@@ -92,11 +97,13 @@ func winHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, Data)
 }
 
+/*Handle the loose page at the endgame*/
 func loseHandler(w http.ResponseWriter, r *http.Request) {
 	t, _ := template.ParseFiles("static/html/lose.html")
 	t.Execute(w, Data)
 }
 
+/*Handle the menu page*/
 func menuHandler(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("static/html/menu.html")
 	if err != nil {
@@ -105,6 +112,7 @@ func menuHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, Data)
 }
 
+/*Handle the login page*/
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	Logged = false
 	loadUserList()
@@ -115,6 +123,12 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	t.Execute(w, Data)
 }
 
+/*
+Get the credentials from the login page and
+check if they are valid. If they are, the user is redirected to the
+level selection menu, if they aren't valid, then the user is redirected
+again to the login page with a customize errorlogin message
+*/
 func checkCredentialsHandler(w http.ResponseWriter, r *http.Request) {
 	if !Logged {
 		username := r.FormValue("username")
@@ -144,6 +158,11 @@ func checkCredentialsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+Handle the registration page, if the user wants to continue as
+a guest then the guestmod is set to true and the user is directly
+redirected to the level selection menu
+*/
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	request := r.FormValue("register")
 	if request == "continuer en tant qu'invité" {
@@ -164,6 +183,11 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+/*
+This handler put the new credentials into the accounts.json file
+and then it redirects again the user to the login page to use his new
+informations
+*/
 func registerOperationHandler(w http.ResponseWriter, r *http.Request) {
 	Current_User.Name = r.FormValue("username")
 	Current_User.Passwd = r.FormValue("password")
