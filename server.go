@@ -109,7 +109,7 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 		if runningHangmanCount == 0 {
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
 			runningHangmanCount = 1
-		} else {
+		} else if runningHangmanCount == 1 {
 			QuitChan <- true
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
 		}
