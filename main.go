@@ -18,9 +18,9 @@ func main() {
 		srcpath += t[i] + "/"
 	}
 	srcpath = srcpath[1:]
-	os.Chdir(srcpath) // change the current working directory
-	var wg sync.WaitGroup
+	os.Chdir(srcpath)     // change the current working directory
+	var wg sync.WaitGroup // creating the waitgroup for the goroutine
 	wg.Add(1)
 	go src.StartServer(&wg)
-	wg.Wait()
+	wg.Wait() // wait the goroutine server to finish before the end of the main func
 }
