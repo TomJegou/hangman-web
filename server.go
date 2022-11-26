@@ -41,7 +41,7 @@ var UsedLettersChan = make(chan []string, 1)
 var Current_User User
 var Data Hangman_Data
 var User_list UserList
-var levelHandlerRequestCount int = 0
+var runningHangmanCount int = 0
 var Logged = false
 var IndexUserList int = 0
 var GuestMod bool = false
@@ -91,29 +91,29 @@ func levelHandler(w http.ResponseWriter, r *http.Request) {
 					Current_User.Passwd = password
 					Current_User.Points = User_list.List[index].Points
 					Data.TotalPoints = Current_User.Points
-					levelHandlerRequestCount = 1
+					runningHangmanCount = 1
 					Logged = true
 					GuestMod = false
 				} else {
 					Data.ErrorLogin = "Wrong Password"
-					levelHandlerRequestCount = 0
+					runningHangmanCount = 0
 					http.Redirect(w, r, "/login", http.StatusFound)
 				}
 			} else {
 				Data.ErrorLogin = "User don't exists"
-				levelHandlerRequestCount = 0
+				runningHangmanCount = 0
 				http.Redirect(w, r, "/login", http.StatusFound)
 			}
 		}
 		t, _ := template.ParseFiles("static/html/ChoiceLvl.html")
 		t.Execute(w, Data)
-		if levelHandlerRequestCount == 1 {
+		if runningHangmanCount == 1 {
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
 		} else {
 			QuitChan <- true
 			go src.Hangman(InputChan, ResponseChan, LevelChan, AttemptChan, WordChan, QuitChan, UsedLettersChan)
 		}
-		levelHandlerRequestCount++
+		runningHangmanCount++
 	}
 }
 
@@ -153,7 +153,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	request := r.FormValue("register")
 	if request == "continuer en tant qu'invité" {
-		levelHandlerRequestCount = 1
+		runningHangmanCount = 1
 		Data.TotalPoints = 0
 		Current_User.Name = "Guest"
 		Current_User.Passwd = "guest"
