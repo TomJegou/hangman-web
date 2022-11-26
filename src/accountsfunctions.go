@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// Stuctures
+// Stuctures section
 type User struct {
 	Name   string
 	Passwd string
