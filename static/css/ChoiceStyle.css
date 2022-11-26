@@ -1,6 +1,7 @@
 html{
-    height: 100vh;
-    background-image: radial-gradient(circle at center, rgb(95, 95, 95) 0, rgb(70, 70, 70), #1f2023 100%);
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(200deg, #e2a9e5 15%,#2b94e5 100%);
 }
 input[type="submit"]:hover {
     opacity: 0.5;
@@ -43,7 +44,7 @@ label{
     font-size: 30px;
 }
 label[for="lv1"]{
-    color: #00BA1F;
+    color: #008f18;
 }
 label[for="lv2"]{
     color: #FFB749;
@@ -62,4 +63,15 @@ input[type="submit"]{
     border: 0;
     border-radius: 10px;
     transition: all 0.7s;
+}
+a{
+    position: relative;
+    padding: 3px;
+    text-decoration: none;
+    border-radius: 3px;
+    border-bottom: 2px solid whitesmoke;
+    color: whitesmoke;
+    top: 285px;
+    font-family: 'Courier New';
+    font-size: 15px;
 }

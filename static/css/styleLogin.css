@@ -21,7 +21,7 @@ body{
     border-radius: 3px;
 } 
 .box h3 strong{
-    color:#8b97d7;
+    color:#53b5ff;
     font-weight: 900;
 }
 .formBloc h3{
@@ -64,12 +64,12 @@ body{
     display: block;
     width: auto;
     padding: 15px 60px;
-    border: 3px solid #8b97d7;
+    border: 3px solid #53b5ff;
     border-radius: 999px;
     background-image: linear-gradient(to right,
-    transparent 50%,#5260ad 50%, #8b97d7);
+    transparent 50%,#e2a9e5 50%, #2b94e5);
     background-size: 200%;
-    color:#8b97d7;
+    color:#53b5ff;
     font-size: 24px;
     font-weight: 500;
     cursor: pointer;
@@ -83,4 +83,15 @@ body{
     top: 0px;
     transform: translateY(-100%);
     border-bottom-color: #8b97d7;
+}
+.formRegister .buttonReg{
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    color: #666;
+}
+p{
+    display: inline;
+    font-size: 13px;
+    color: #666;
 }
