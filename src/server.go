@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"encoding/json"
@@ -224,11 +224,4 @@ func UserExists(userlist []User, username string) (bool, int) {
 
 func savePoints() {
 	User_list.List[IndexUserList].Points = Current_User.Points
-}
-
-func main() {
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go StartServer(&wg)
-	wg.Wait()
 }
