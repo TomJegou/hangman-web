@@ -18,6 +18,7 @@ func StartServer(wg *sync.WaitGroup) {
 	http.HandleFunc("/registeroperation", registerOperationHandler)
 	http.HandleFunc("/hangman", hangHandler)
 	http.HandleFunc("/level", levelHandler)
+	http.HandleFunc("/checklevel", checkLevelHandler)
 	http.HandleFunc("/win", winHandler)
 	http.HandleFunc("/lose", loseHandler)
 	http.HandleFunc("/menu", menuHandler)
